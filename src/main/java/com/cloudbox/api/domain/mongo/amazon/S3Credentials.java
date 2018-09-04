@@ -1,10 +1,12 @@
-package com.cloudbox.api.model.mongo.amazon;
+package com.cloudbox.api.domain.mongo.amazon;
 
+import com.amazonaws.auth.AWSCredentials;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.Transient;
 import org.springframework.data.annotation.Version;
 import org.springframework.data.mongodb.core.index.CompoundIndex;
 import org.springframework.data.mongodb.core.index.CompoundIndexes;
@@ -21,7 +23,7 @@ import java.time.LocalDate;
 @CompoundIndexes({
         @CompoundIndex(name = "AmazonAccount_key_index", def = "{'accessKey' : 1, 'secretKey': 1}")
 })
-public class S3Credentials {
+public class S3Credentials implements AWSCredentials {
 
     @Id
     private String id;
@@ -45,4 +47,16 @@ public class S3Credentials {
 
     @Version
     private Long version;
+
+    @Transient
+    @Override
+    public String getAWSAccessKeyId() {
+        return getAccessKey();
+    }
+
+    @Transient
+    @Override
+    public String getAWSSecretKey() {
+        return getSecretKey();
+    }
 }
