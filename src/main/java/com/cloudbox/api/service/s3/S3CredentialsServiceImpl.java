@@ -2,14 +2,15 @@ package com.cloudbox.api.service.s3;
 
 import com.amazonaws.services.s3.AmazonS3;
 import com.cloudbox.api.domain.mongo.amazon.S3Credentials;
-import com.cloudbox.api.domain.response.ErrorRS;
 import com.cloudbox.api.exception.cloud.auth.CloudAuthValidationException;
-import lombok.NonNull;
+import com.cloudbox.api.mongo.repository.amazon.S3CredentialsRepository;
+import io.reactivex.Maybe;
+import io.reactivex.Single;
 import lombok.RequiredArgsConstructor;
-import lombok.val;
-import org.springframework.jdbc.support.xml.SqlXmlFeatureNotImplementedException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.validation.constraints.NotNull;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Function;
@@ -18,11 +19,15 @@ import java.util.function.Function;
 @RequiredArgsConstructor
 public class S3CredentialsServiceImpl implements S3CredentialsService {
 
-    @NonNull
+    @Autowired
     private Function<S3Credentials, AmazonS3> s3DynamicClient;
 
+
+    @NotNull
+    private S3CredentialsRepository s3CredentialsRepository;
+
     @Override
-    public boolean checkCredentials(String accessKey, String secretKey) {
+    public boolean isExist(String accessKey, String secretKey) {
         return Optional.of(new S3Credentials(accessKey, secretKey))
                 .map(this::initDynamicClient)
                 .map(AmazonS3::getS3AccountOwner)
@@ -38,7 +43,9 @@ public class S3CredentialsServiceImpl implements S3CredentialsService {
     }
 
     @Override
-    public S3Credentials addCredentials(String accessKey, String secretKey) {
-        throw new UnsupportedOperationException("not implemented!");
+    public Maybe<S3Credentials> addCredentials(String accessKey, String secretKey) {
+        return Single.just(new S3Credentials(accessKey, secretKey))
+                .flatMap(i -> s3CredentialsRepository.save(i))
+                .filter(Objects::nonNull);
     }
 }

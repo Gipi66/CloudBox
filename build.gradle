@@ -27,7 +27,7 @@ repositories {
 dependencies {
     compile('org.springframework.boot:spring-boot-starter-actuator')
     compile('org.springframework.boot:spring-boot-starter-aop')
-    compile('org.springframework.boot:spring-boot-starter-batch')
+//    compile('org.springframework.boot:spring-boot-starter-batch')
 //	compile('org.springframework.boot:spring-boot-starter-cache')
 //	compile('org.springframework.boot:spring-boot-starter-data-mongodb')
     compile('org.springframework.boot:spring-boot-starter-data-mongodb-reactive')
@@ -52,5 +52,8 @@ dependencies {
 
     // S3
     compile group: 'com.amazonaws', name: 'aws-java-sdk-s3', version: '1.11.401'
+
+    // RXJava2
+    compile group: 'io.reactivex.rxjava2', name: 'rxjava', version: '2.2.1'
 
 }

@@ -20,20 +20,20 @@ import java.time.LocalDate;
 @Data
 @EqualsAndHashCode(of = "id")
 @RequiredArgsConstructor
-@CompoundIndexes({
-        @CompoundIndex(name = "AmazonAccount_key_index", def = "{'accessKey' : 1, 'secretKey': 1}")
-})
+//@CompoundIndexes({
+//        @CompoundIndex(name = "AmazonAccount_key_index", def = "{'accessKey' : 1, 'secretKey': 1}")
+//})
 public class S3Credentials implements AWSCredentials {
 
     @Id
     private String id;
 
-    @Indexed(unique = true)
+//    @Indexed(unique = true)
     @Field(value = "accessKey")
     @NonNull
     private String accessKey;
 
-    @Indexed(unique = true)
+//    @Indexed(unique = true)
     @Field(value = "secretKey")
     @NonNull
     private String secretKey;
@@ -41,7 +41,7 @@ public class S3Credentials implements AWSCredentials {
     @Field(value = "registrationDate")
     private LocalDate registrationDate = LocalDate.now();
 
-    @Indexed(unique = true)
+//    @Indexed(unique = true)
     @Field(value = "lastSuccessfulAuth")
     private LocalDate lastSuccessfulAuth = LocalDate.now();
 

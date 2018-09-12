@@ -6,4 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface S3CredentialsRepository extends RxJava2CrudRepository<S3Credentials, String> {
+    boolean existsByAccessKeyLikeAndSecretKeyLike(String accessKey, String secretKey);
 }
